@@ -1,0 +1,289 @@
+\documentclass{article}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[scale=0.85]{geometry}
+
+
+% Useful packages
+
+\usepackage{amsmath}
+\usepackage{amssymb,bm}
+\usepackage{mathrsfs}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{graphicx} % For including images
+\usepackage{caption} % For captions
+\usepackage{subcaption,color} % For subfigures
+\usepackage{indentfirst}
+\usepackage{amsfonts}
+\usepackage{parskip}
+\usepackage{float,url}
+\usepackage{amsthm}
+\usepackage{cleveref}
+\usepackage{algpseudocodex}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}{Definition}[section]
+
+
+\begin{document}
+
+\title{E0 234: Introduction to Randomized Algorithms\\ Assignment 01}
+\author{Author: Sahil Chaudhary\\ Faculty Instructor: Prof. Arindam Khan}
+\date{Due Date: 27th January 2025}
+
+\maketitle
+
+\newpage
+\section*{Graded Problems:}
+\begin{enumerate}
+    \item Let $I_A$ be the indicator random variable of the event $A$, i.e., 
+    \begin{align*}
+        I_A &= \begin{cases}
+            1, \quad if \quad \omega \in A,\\
+            0, \quad if \quad \omega \in A^c
+        \end{cases}
+    \end{align*}
+    for each $\omega$ in the sample space. Note that $P(A)=E[I_A]$. Show the following:
+    \begin{itemize}
+        \item $I_A + I_{A^c} = 1$
+        \item $I_{A \cap B} = I_A \cdot I_B$ 
+        \item $I_{A \cup B} = I_A + I_B - I_A \cdot I_B$
+        \item More Generally, if $B = \cup_{i=1}^{n}A_i, then I_B = 1-\prod_{i=1}^{n}(1-I_{A_i})$
+    \end{itemize}
+    Suppose $x_1,x_2,\cdots, x_n$ such that $0 \leq x_i \leq 1$ for $J \subseteq [n]$, let $x_J = \prod_{i\in J}x_i$. Let $p(x_1,x_2,\cdots,x_n)=\prod_{i=1}^{n}(1-x_i)$. Show the following:
+    \begin{align*}
+        p(x_1,x_2,\cdots,x_n) &= \sum_{S \subseteq [n]}(-1)^{|S|}x_S\\
+        p(x_1,x_2,\cdots,x_n) &\leq \sum_{S \subseteq [n], |S| \leq K}(-1)^{|S|}x_S \quad \text{(K even)}\\
+        p(x_1,x_2,\cdots,x_n) &\geq \sum_{S \subseteq [n], |S| \leq K}(-1)^{|S|}x_S \quad \text{(K odd)}
+    \end{align*}
+    Conclude from these, using linearity of expectation that,
+    \begin{align*}
+        P(\cup_{i=1}^{n}A_i)&= \sum_{i}P(A_i)-\sum_{i<j}P(A_i \cap A_j)+ \cdots + (-1)^{n+1}P(A_1 \cap A_2 \cdots \cap A_n)\\
+        P(\cup_{i=1}^{n}A_i)&\geq \sum_{i}P(A_i)-\sum_{i<j}P(A_i \cap A_j)+ \cdots + (-1)^{k+1}\sum_{i_1 <i_2 < \cdots < i_k}P(A_{i_1} \cap A_{i_2} \cdots \cap A_{i_n}) \quad \text{K even}\\
+        P(\cup_{i=1}^{n}A_i)&\leq \sum_{i}P(A_i)-\sum_{i<j}P(A_i \cap A_j)+ \cdots + (-1)^{k+1}\sum_{i_1 <i_2 < \cdots < i_k}P(A_{i_1} \cap A_{i_2} \cdots \cap A_{i_n}) \quad \text{K odd}\\
+    \end{align*}
+    \textbf{Solution:}\\
+    \begin{itemize}
+        \item $I_A + I_{A^c}=1$ \\
+        \textbf{Solution}
+        \begin{align*}
+            I_A + I_{A^c} &= I_{\{ \omega \in A\}} + I_{\{ \omega \in A^c \}}\\
+            &= \begin{cases}
+                1 + 0, \quad if \omega \in A\\
+                0 + 1, \quad if \omega \in A^c
+            \end{cases}\\
+            &= \begin{cases}
+                1 , \quad if \omega \in A\\
+                1, \quad if \omega \in A^c
+            \end{cases}\\
+            &= 1
+        \end{align*}
+        
+        \item $I_{A \cap B}=I_A \cdot I_B$\\
+        \textbf{Solution}
+        \begin{align*}
+            I_{\omega_A \cap \omega_B} &= \begin{cases}
+                1 ,\quad if \quad I_{A} = I_B =1 \\
+                0 , \quad if \quad I_{A}=0 \text{ or } I_B =0
+            \end{cases}\\
+            &= \begin{cases}
+                1, \quad I_A \cdot I_B=1\\
+                0, \quad I_A \cdot I_B = 0
+            \end{cases}\\
+            &= I_{A} \cdot I_B
+        \end{align*}
+        \item $I_{A \cup B} = I_A + I_B - I_A \cdot I_B$\\
+        \textbf{Solution:}
+         \begin{align*}
+             I_{A \cup B}&= \begin{cases}
+                 1 , \quad if \quad \omega \in A \cup B\\
+                 0, \quad if \quad \omega \in (A \cup B)^C
+             \end{cases}\\
+             &= \begin{cases}
+                 1, \quad if \quad \omega \in A , \omega \in B, \omega \in A \cap B\\
+                 0, \quad otherwise
+             \end{cases}\\
+             &= \begin{cases}
+                 1, \quad if \quad I_A=1 \text{ or } I_B =1\\
+                 0, \quad if \quad I_A= I_B=0
+             \end{cases} \\
+             &= \begin{cases}
+                 1, \quad 1-(1-I_A)(1-I_B)=1\\
+                 0, \quad 1-(1-I_A)(1-I_B)=0
+             \end{cases}\\
+             &= \begin{cases}
+                 1, \quad  I_A+I_B-I_A \cdot I_B=1\\
+                 0, \quad  I_A+I_B-I_A \cdot I_B=0
+             \end{cases}\\
+             &= I_A+I_B-I_A \cdot I_B
+         \end{align*}
+        \item If $B = \cup_{i=1}^{n} A_i$ then $I_B = 1-\prod_{i=1}^{n}(1-I_{A_i})$.
+        \\
+        \textbf{Solution:}
+        \begin{align*}
+            I_B &=
+                \begin{cases}
+                    1, \quad if \quad \omega \in \cup_{i=1}^{n}A_i\\
+                    0, \quad if \quad \omega \in (\cup_{i=1}^{n}A_i)^c
+                \end{cases}\\
+                &=\begin{cases}
+                    1, \quad if \quad A_1=0 \text{ or } A_2=0 \text{ or } \cdots \text{ or }A_n=0\\
+                    0, \quad if \quad  A_1=0 \text{ and } A_2=0 \text{ and } \cdots \text{ and  }A_n=0
+                \end{cases}\\
+                &= \begin{cases}
+                    1, \quad 1-\prod_{i=1}^{n}I_{A_i}=1\\
+                    0, \quad 1-\prod_{i=1}^{n}I_{A_i}=0
+                \end{cases}\\
+                &= 1-\prod_{i=1}^{n}I_{A_i}
+        \end{align*}
+    \end{itemize}
+    Similarly, 
+    \begin{align*}
+        p(x_1,x_2, \cdots , x_n)&= \prod_{i=1}^{n}(1-x_i)
+    \end{align*}
+    We will prove the statement by induction:
+    Let $P(n)$ be the following property :
+    \begin{align*}
+        p(x_1,x_2,\cdots,x_n)=\sum_{S \subseteq [n]}(-1)^{|S|}x_{S}
+    \end{align*}
+    \begin{proof}
+        \textbf{Base Case: n=1}
+        \begin{align*}
+            \sum_{S \subseteq [1]}(-1)^{|S|}x_{S}
+            &=\sum_{S \subseteq [1]}(-1)^{|S|}\prod_{i \in S}x_{i}\\
+            &= (-1)^0+(-1)^1x_1\\
+            &= (1 -x_1)
+        \end{align*}
+        and,
+        \begin{align*}
+            p(x_1)=(1-x_1)
+        \end{align*}
+        Assume p(n) holds for $n=k \in N$.\\
+        \textbf{Inductive Case: n=k+1}\\
+        \begin{align*}
+            p(x_1,x_2,\cdots,x_k)&=\sum_{S \subseteq [k]}(-1)^{|S|}x_S
+        \end{align*}
+        and, 
+        \begin{align*}
+            p(x_1,x_2,\cdots,x_{k+1})&=\prod_{i=1}^{k+1}(1-x_i)\\
+            &=(1-x_{k+1})\prod_{i=1}^{k}(1-x_i)\\
+            &=(1-x_{k+1})p(x_1,x_2,\cdots,x_k)\\
+            &=(1-x_{k+1})\sum_{S \subseteq [n]}(-1)^{|S|}x_S\\
+            &=\sum_{S \subseteq [k]}(-1)^{|S|}x_S-x_{k+1}\sum_{S \subseteq [k]}(-1)^{|S|}x_S\\
+            &= \sum_{S \subseteq [k]}(-1)^{|S|}x_S-\sum_{S \subseteq [k]}(-1)^{|S|}x_{S \cup \{k+1\}}\\
+            &=\sum_{S \subseteq [k]}(-1)^{|S|}x_S+\sum_{S \subseteq [k]}(-1)^{|S|+1}x_{S \cup \{k+1\}}\\
+            &=\sum_{S \subseteq [k]} \left ((-1)^{|S|}x_S+(-1)^{|S|+1}x_{S \cup \{k+1\}}\right)\\
+            &= \sum_{S \subseteq [k+1]} (-1)^{|S|}x_{S}
+        \end{align*}
+    \end{proof}
+    we will prove the other 2 statement with induction as well.
+
+    Let's deal with Indicator random variable,
+    \begin{align*}
+        E[I_A]&=P(A)\\
+        E[I_A+I_{A^c}]&=P(A)+P(A^c)\\
+        1&=P(A)+P(A^c)\\
+    \end{align*}
+    Assume A and B are independent. Then,
+    \begin{align*}
+        E[I_{A \cap B}]&=E[I_A \cdot I_B]\\
+        P(A\cap B)&=E[I_A]E[I_B]\\
+        &=P(A)P(B)
+    \end{align*}
+    Similarly, 
+    \begin{align*}
+        E[I_{A \cup B}]&=E[I_A+I_B-I_A\cdot I_B]\\
+        P(A\cup B)&=P(A)+P(B)-P(A)P(B)\\
+        &=P(A)+P(B)-P(A \cap B)
+    \end{align*}
+    and assuming independence of $A_i's$
+    \begin{align*}
+        P(\cup_{i=1}^{n}A_i)&=E[I_{(\cup_{i=1}^{n}A_i)}]\\
+        &=E[1-\prod_{i=1}^{n}(1-I_{A_i})]\\
+        &=E[1]-E[\prod_{i=1}^{n}(1-I_{A_i})]\\
+        &=E[1]-\prod_{i=1}^{n}E[(1-I_{A_i})]\\
+        &=1-\prod_{i=1}^{n}(1-P(A_i))
+    \end{align*}
+    Proof might be disgusting so far.
+    \item Consider the randomized min-cut algorithm presented in the class. Suppose that at each step, instead of choosing a random edge for contraction, two vertices are chosen at random and are merged into a single vertex. Show that there exist graphs for which the probability that this algorithm finds a min-cut is exponentially small in the number of vertices.
+    \\
+    \textbf{Solution:}\\
+    \item Improved Karger's Algorithm:\\
+    Consider the following algorithm for min-cut. Starting with a graph with n vertices, first contract the graph down to $k$ vertices using the randomized edge contraction method discussed in class. Make copies of this reduced graph with $k$ vertices, and now run the randomized min-cut algorithm on this reduced graph $l$ times, independently. Determine the total number of edge contractions performed by this algorithm, and bound the probability of finding a min-cut in at least one of the $l$ runs.
+    Optimize (as much as you can) values of $k$ and $l$ for the variation above that maximize the probability of finding a minimum cut while using the same number of edge contractions as running the original Karger's algorithm twice.\\
+    \textbf{Solution:}\\
+    Just to make sense of the algorithm, let us write a pseudo code for it:
+    \begin{algorithmic}[1]
+        \Function{Improved-Karger}{G,k,l}
+            \State{$E \leftarrow G.Edges$}
+            \State{$n \leftarrow G.Vertices$}
+            \State{$G_1 \leftarrow Karger(G,n-k)$}
+            \State{$G_{set}=[ \quad ]$}
+            \For{$i=1$ to $l$}
+                \State{$G_i \leftarrow Karger(G_1)$}
+                \State{$G_{set}$.append$(G_i)$}
+            \EndFor
+        \EndFunction
+    \end{algorithmic}
+    $Karger(graph,n)$ takes the graph and runs the algorithm for $n$ times and default run would be $G.vertices-2$(if not specified).
+
+    Let C be the cut-set in the graph, removal of the set C partitions the set of vertices into two sets, $S$ and $G-S$.
+    Let $E_i$ be the event that the edge contracted in iteration i is not in C. Let $F_i=\cap_{j=1}^{i}E_j$ be the event that no edge of C was contracted in the first i iterations.
+
+    Let $m$ be the number of edges in mincut set. Thus, all vertices in the graph must have degree m or larger. If each vertex is adjacent to at least m edges, then the graph must have at least $\frac{nm}{2}$ edges.
+
+    Since there are at least $\frac{nk}{2}$ edges in the graph and since C has k edges, the probability that we donot choose an edge of C in the first iteration is given by,
+    \begin{align*}
+        P(F_1)=P(E_1)&\geq 1-\frac{m}{\frac{nm}{2}}\\
+        &\geq 1-\frac{2}{n}
+    \end{align*}
+    Similarly,
+    \begin{align*}
+        P(E_i | F_{i-1}) &\geq 1-\frac{2m}{m(n-i+1)}\\
+        &\geq 1-\frac{2}{n-i+1}
+    \end{align*}
+    Since, the algorithm is run for $n-k$ iterations.
+    \begin{align*}
+        P(F_{n-k})&=P(E_{n-k} \cap F_{n-k-1})\\
+        &= P(E_{n-k}|F_{n-k-1})P(F_{n-k-1})\\
+        &\geq \left ( 1-\frac{2}{n-(n-k)+1)} \right)P(F_{n-k-1})\\
+        &= \prod_{i=1}^{n-k} \left( 1-\frac{2}{n-i+1}\right)\\
+        &= \prod_{i=1}^{n-k} \left (\frac{n-i-1}{n-i+1} \right)\\
+        &= \frac{n-2}{n} \frac{n-3}{n-1} \frac{n-4}{n-2} \cdots \frac{n-(n-k-1)-1}{n-(n-k-1)+1} \frac{n-(n-k)-1}{n-(n-k)+1}\\
+        &= \frac{1}{n} \frac{1}{n-1} k(k-1)\\
+        &= \frac{k(k-1)}{n(n-1)}
+    \end{align*}
+    The probability that no edge of C was contracted in the first $n-k$ iterations is $\frac{k(k-1)}{n(n-1)}$. 
+    Now, run the algorithm on this new graph of $n-k$ vertices for $n-k-2$ iterations. Then,
+    \begin{align*}
+        P(F_{n-2,n-k})&=P(E_{n-2} \cap F_{n-3})\\
+        &\geq \prod_{i=n-k}^{n-2} \left ( 1-\frac{2}{n-i+1}\right)\\
+        &= \prod_{i=n-k}^{n-2} \left ( \frac{n-i-1}{n-i+1}\right)\\
+        &= \frac{n-(n-k)-1}{n-(n-k)+1} \frac{n-(n-k-1)-1}{n-(n-k-1)+1} \cdots\frac{3}{5}\frac{2}{4}\frac{1}{3}\\
+        &= \frac{k-1}{k+1} \frac{k}{k+2} \cdots\frac{3}{5}\frac{2}{4}\frac{1}{3}\\
+        &= \frac{2 \cdot 1}{(k+1)(k+2)}\\
+        &= \frac{2}{(k+1)(k+2)}
+    \end{align*}
+    Run the above for $l$ iteration,
+    \begin{align*}
+        \left(1-\frac{2}{(k+1)(k+2)} \right)^l 
+    \end{align*}
+    \item Consider the following way to pick a random permutation $\pi$ of the set of $n(>2)$ integers $I_n:= \{1,2,\cdots,n\}$:
+    \begin{itemize}
+        \item Run the randomized Quicksort.
+        \item Let T be the recursion tree corresponding to the execution of randomized quicksort.
+        \item Let T be the recursion tree corresponding to the execution of Randomized Quicksort. 
+        \item Let $\pi$ be the permutation induced by the level-order traversal of T(i.e., the nodes are visited in the increasing order of level numbers and in a left-to-right order within each level).
+    \end{itemize}
+    Is $\pi$ uniformly distributed over the space of all permutations of the elements in $I_n$? Explain your answer.
+\end{enumerate}
+\end{document}
